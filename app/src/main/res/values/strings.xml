@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Story App</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="title_signup_page">Complete your data below</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="message_login_page">Register now</string>
+    <string name="title_login_page">Don\'t have an account yet?</string>
+    <string name="name">Full Name</string>
+    <string name="logout">Logout</string>
+    <string name="sign_up_error">Failed. %s</string>
+    <string name="hint_login_email">Enter ur registered email!</string>
+    <string name="hint_login_password">Your password!</string>
+    <string name="login_error">Failed. %s</string>
+    <string name="our_story_begins_here">our story begins here</string>
+    <string name="add_new_story">Add new story</string>
+    <string name="item_story_content_desc">User\'s story picture</string>
+</resources>

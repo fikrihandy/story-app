@@ -1,15 +1,27 @@
-package academy.bangkit.storyapp.data
+package academy.bangkit.storyapp.data.repository
 
+import academy.bangkit.storyapp.view.addstory.ResultState
 import academy.bangkit.storyapp.data.pref.UserModel
 import academy.bangkit.storyapp.data.pref.UserPreference
+import academy.bangkit.storyapp.data.response.DetailStoryResponse
+import academy.bangkit.storyapp.data.response.FileUploadResponse
 import academy.bangkit.storyapp.data.response.GetAllStoriesResponse
 import academy.bangkit.storyapp.data.response.LoginResponse
 import academy.bangkit.storyapp.data.retrofit.ApiConfig
+import androidx.lifecycle.liveData
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
+import retrofit2.HttpException
 import retrofit2.Response
+import java.io.File
 
 class UserRepository private constructor(
     private val userPreference: UserPreference
@@ -22,9 +34,17 @@ class UserRepository private constructor(
         return userPreference.getSession()
     }
 
+    fun getToken(): String {
+        // You would typically handle blocking or asynchronous calls here
+        return runBlocking {
+            userPreference.getToken().first()
+        }
+    }
+
     suspend fun logout() {
         userPreference.logout()
     }
+
 
     fun postLogin(
         email: String,
@@ -89,6 +109,58 @@ class UserRepository private constructor(
         )
     }
 
+    fun getDetailStory(
+        token: String,
+        id: String,
+        result: (Boolean, DetailStoryResponse?) -> Unit
+    ) {
+        val client = ApiConfig.getApiService(token).getDetailStory(id)
+        client.enqueue(
+            object : Callback<DetailStoryResponse> {
+                override fun onResponse(
+                    call: Call<DetailStoryResponse>,
+                    response: Response<DetailStoryResponse>
+                ) {
+                    val responseBody = response.body()
+                    if (response.isSuccessful && responseBody != null) {
+                        result(true, responseBody)
+                    } else {
+                        val gson = Gson()
+                        val errorResponseToDetailStoryResponse = gson.fromJson(
+                            response.errorBody()?.string(),
+                            DetailStoryResponse::class.java
+                        )
+                        result(false, errorResponseToDetailStoryResponse)
+                    }
+                }
+
+                override fun onFailure(call: Call<DetailStoryResponse>, t: Throwable) {
+                    result(false, null)
+                }
+            }
+        )
+    }
+
+    fun uploadImage(token: String, imageFile: File, description: String) = liveData {
+        emit(ResultState.Loading)
+        val requestBody = description.toRequestBody("text/plain".toMediaType())
+        val requestImageFile = imageFile.asRequestBody("image/jpeg".toMediaType())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "photo",
+            imageFile.name,
+            requestImageFile
+        )
+        try {
+            val successResponse =
+                ApiConfig.getApiService(token).uploadImage(multipartBody, requestBody)
+            emit(ResultState.Success(successResponse))
+        } catch (e: HttpException) {
+            val errorBody = e.response()?.errorBody()?.string()
+            val errorResponse = Gson().fromJson(errorBody, FileUploadResponse::class.java)
+            emit(ResultState.Error(errorResponse.message))
+        }
+
+    }
 
     companion object {
         @Volatile

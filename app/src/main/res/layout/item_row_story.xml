@@ -37,6 +37,6 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textAlignment="center"
-            tools:text="Judul Story" />
+            tools:text="Name" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

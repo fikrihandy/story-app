@@ -2,7 +2,7 @@ package academy.bangkit.storyapp.view.authenticatiton.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import academy.bangkit.storyapp.data.UserRepository
+import academy.bangkit.storyapp.data.repository.UserRepository
 import academy.bangkit.storyapp.data.pref.UserModel
 import academy.bangkit.storyapp.data.response.LoginResponse
 import androidx.lifecycle.LiveData

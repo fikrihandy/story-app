@@ -1,4 +1,4 @@
-package academy.bangkit.storyapp.data
+package academy.bangkit.storyapp.data.repository
 
 import academy.bangkit.storyapp.data.response.RegisterResponse
 import academy.bangkit.storyapp.data.retrofit.ApiConfig

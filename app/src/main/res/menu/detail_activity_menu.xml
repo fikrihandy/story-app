@@ -12,9 +12,5 @@
             android:icon="@drawable/add_new_story"
             android:title="@string/add_new_story"
             app:showAsAction="ifRoom" />
-        <item
-            android:id="@+id/logout"
-            android:title="@string/logout"
-            app:showAsAction="never" />
     </group>
 </menu>

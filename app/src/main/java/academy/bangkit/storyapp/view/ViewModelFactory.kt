@@ -1,14 +1,16 @@
 package academy.bangkit.storyapp.view
 
-import academy.bangkit.storyapp.data.SignupRepository
+import academy.bangkit.storyapp.data.repository.SignupRepository
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import academy.bangkit.storyapp.data.UserRepository
+import academy.bangkit.storyapp.data.repository.UserRepository
 import academy.bangkit.storyapp.di.Injection
+import academy.bangkit.storyapp.view.addstory.AddStoryViewModel
 import academy.bangkit.storyapp.view.authenticatiton.login.LoginViewModel
 import academy.bangkit.storyapp.view.liststory.MainViewModel
 import academy.bangkit.storyapp.view.authenticatiton.signup.SignupViewModel
+import academy.bangkit.storyapp.view.storydetail.DetailStoryViewModel
 
 class ViewModelFactory(private val repository: UserRepository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -26,6 +28,14 @@ class ViewModelFactory(private val repository: UserRepository) :
 
             modelClass.isAssignableFrom(SignupViewModel::class.java) -> {
                 SignupViewModel(repository = SignupRepository()) as T
+            }
+
+            modelClass.isAssignableFrom(DetailStoryViewModel::class.java) -> {
+                DetailStoryViewModel(repository) as T
+            }
+            
+            modelClass.isAssignableFrom(AddStoryViewModel::class.java) -> {
+                AddStoryViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

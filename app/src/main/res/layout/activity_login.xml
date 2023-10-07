@@ -8,7 +8,6 @@
 
     <include
         android:id="@+id/loadingView"
-        android:layout_gravity="top"
         layout="@layout/loading_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

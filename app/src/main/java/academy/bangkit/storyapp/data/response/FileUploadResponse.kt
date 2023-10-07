@@ -2,14 +2,11 @@ package academy.bangkit.storyapp.data.response
 
 import com.google.gson.annotations.SerializedName
 
-data class DetailStoryResponse(
+data class FileUploadResponse(
 
     @field:SerializedName("error")
     val error: Boolean,
 
     @field:SerializedName("message")
-    val message: String,
-
-    @field:SerializedName("story")
-    val story: Story?
+    val message: String
 )

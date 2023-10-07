@@ -3,16 +3,14 @@ package academy.bangkit.storyapp.view.authenticatiton.signup
 import academy.bangkit.storyapp.R
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import academy.bangkit.storyapp.databinding.ActivitySignupBinding
 import academy.bangkit.storyapp.view.ViewModelFactory
 import academy.bangkit.storyapp.view.authenticatiton.customview.CustomViewUtil
+import academy.bangkit.storyapp.view.extension.EnableFullscreen
 import androidx.activity.viewModels
 
 class SignupActivity : AppCompatActivity() {
@@ -24,7 +22,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         CustomViewUtil.setupCustomView(
-            binding.edLoginEmail,
+            binding.edRegisterEmail,
             binding.edRegisterPassword,
             binding.signupButton,
             binding.passwordEditTextLayout,
@@ -34,27 +32,14 @@ class SignupActivity : AppCompatActivity() {
 
         CustomViewUtil.setRegisterButtonEnable(
             binding.edRegisterName.text.toString(),
-            binding.edLoginEmail.text.toString(),
+            binding.edRegisterEmail.text.toString(),
             binding.edRegisterPassword.text.toString(),
             binding.signupButton
         )
 
-        setupView()
+        EnableFullscreen.setupView(window, supportActionBar)
         setupAction()
         playAnimation()
-    }
-
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-        supportActionBar?.hide()
     }
 
     private fun setupAction() {
@@ -65,7 +50,7 @@ class SignupActivity : AppCompatActivity() {
             }
 
             val name = binding.edRegisterName.text.toString()
-            val email = binding.edLoginEmail.text.toString()
+            val email = binding.edRegisterEmail.text.toString()
             val password = binding.edRegisterPassword.text.toString()
 
             viewModel.postRegister(name, email, password)
@@ -103,7 +88,7 @@ class SignupActivity : AppCompatActivity() {
             if (isLoading) whenFailed.visibility = View.GONE
             loadingView.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
             edRegisterName.isEnabled = !isLoading
-            edLoginEmail.isEnabled = !isLoading
+            edRegisterEmail.isEnabled = !isLoading
             edRegisterPassword.isEnabled = !isLoading
             signupButton.isEnabled = !isLoading
             nameEditTextLayout.isEnabled = !isLoading

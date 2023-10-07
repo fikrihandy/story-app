@@ -4,11 +4,8 @@ import academy.bangkit.storyapp.R
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import academy.bangkit.storyapp.data.pref.UserModel
@@ -17,7 +14,7 @@ import academy.bangkit.storyapp.view.ViewModelFactory
 import academy.bangkit.storyapp.view.authenticatiton.customview.CustomViewUtil
 import academy.bangkit.storyapp.view.liststory.MainActivity
 import academy.bangkit.storyapp.view.authenticatiton.signup.SignupActivity
-import android.util.Log
+import academy.bangkit.storyapp.view.extension.EnableFullscreen
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -43,22 +40,9 @@ class LoginActivity : AppCompatActivity() {
             binding.loginButton
         )
 
-        setupView()
+        EnableFullscreen.setupView(window, supportActionBar)
         setupAction()
         playAnimation()
-    }
-
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-        supportActionBar?.hide()
     }
 
     private fun setupAction() {

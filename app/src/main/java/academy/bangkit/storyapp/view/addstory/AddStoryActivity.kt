@@ -23,7 +23,6 @@ class AddStoryActivity : AppCompatActivity() {
         ViewModelFactory.getInstance(this)
     }
     private lateinit var binding: ActivityAddStoryBinding
-    private var currentImageUri: Uri? = null
 
     private val requestPermissionLauncher =
         registerForActivityResult(
@@ -46,22 +45,24 @@ class AddStoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAddStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         EnableFullscreen.setupView(window, supportActionBar)
 
         if (!allPermissionsGranted()) {
             requestPermissionLauncher.launch(REQUIRED_PERMISSION)
         }
-
         binding.galleryButton.setOnClickListener { startGallery() }
         binding.buttonAdd.setOnClickListener { uploadImage() }
         binding.deleteButton.setOnClickListener { deleteImage() }
         binding.cameraButton.setOnClickListener { startCamera() }
+
+        showImage()
     }
 
     private fun startCamera() {
-        currentImageUri = getImageUri(this)
-        launcherIntentCamera.launch(currentImageUri)
+        viewModel.setImageUri(getImageUri(this))
+        viewModel.imageUri.observe(this) {
+            launcherIntentCamera.launch(it)
+        }
     }
 
     private val launcherIntentCamera = registerForActivityResult(
@@ -74,42 +75,41 @@ class AddStoryActivity : AppCompatActivity() {
 
     private fun uploadImage() {
         showLoading(true)
-        if (currentImageUri == null) {
-            showToast(getString(R.string.empty_image_warning))
-            showLoading(false)
-        }
-        disableButton(true)
-        currentImageUri?.let { uri ->
-            val imageFile = uriToFile(uri, this).reduceFileImage()
-            val description = binding.edAddDescription.text.toString()
+        viewModel.imageUri.observe(this) { currentImageUri ->
+            if (currentImageUri == null) {
+                showToast(getString(R.string.empty_image_warning))
+                showLoading(false)
+            }
+            disableButton(true)
 
-            viewModel.uploadImage(imageFile, description).observe(this) { result ->
-                if (result != null) {
-                    when (result) {
-                        is ResultState.Loading -> {
-                            showLoading(true)
-                        }
+            currentImageUri?.let { uri ->
+                val imageFile = uriToFile(uri, this).reduceFileImage()
+                val description = binding.edAddDescription.text.toString()
 
-                        is ResultState.Success -> {
-                            showToast(result.data.message)
-                            showLoading(false)
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
-                        }
+                viewModel.uploadImage(imageFile, description).observe(this) { result ->
+                    if (result != null) {
+                        when (result) {
+                            is ResultState.Loading -> {
+                                showLoading(true)
+                            }
 
-                        is ResultState.Error -> {
-                            showToast(result.error)
-                            showLoading(false)
-                            disableButton(false)
+                            is ResultState.Success -> {
+                                showToast(result.data.message)
+                                showLoading(false)
+                                startActivity(Intent(this, MainActivity::class.java))
+                                finish()
+                            }
+
+                            is ResultState.Error -> {
+                                showToast(result.error)
+                                showLoading(false)
+                                disableButton(false)
+                            }
                         }
                     }
                 }
-            }
-        } ?: {
-            showToast(getString(R.string.empty_image_warning))
-            showLoading(false)
+            } ?: showToast(getString(R.string.empty_image_warning)).run { showLoading(false) }
         }
-
     }
 
     private fun disableButton(disableButton: Boolean) {
@@ -139,7 +139,7 @@ class AddStoryActivity : AppCompatActivity() {
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri != null) {
-            currentImageUri = uri
+            viewModel.setImageUri(uri)
             showImage()
         } else {
             Toast.makeText(this@AddStoryActivity, "No media selected", Toast.LENGTH_SHORT).show()
@@ -147,23 +147,26 @@ class AddStoryActivity : AppCompatActivity() {
     }
 
     private fun showImage() {
-        if (currentImageUri == null) {
-            binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
-        } else {
-            currentImageUri.let {
-                binding.previewImageView.setImageURI(it)
+        viewModel.imageUri.observe(this) { currentImageUri ->
+            if (currentImageUri == null) {
+                binding.previewImageView.setImageResource(R.drawable.ic_place_holder)
+            } else {
+                viewModel.imageUri.observe(this) {
+                    binding.previewImageView.setImageURI(it)
+                }
             }
         }
     }
 
     private fun deleteImage() {
-        if (currentImageUri == null) {
-            showToast("You haven't selected an image yet :3")
-        } else {
-            currentImageUri = null
-            showImage()
+        viewModel.imageUri.observe(this) { currentImageUri ->
+            if (currentImageUri == null) {
+                showToast("You haven't selected an image yet :3")
+            } else {
+                viewModel.setImageUri(null)
+                showImage()
+            }
         }
-
     }
 
     companion object {

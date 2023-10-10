@@ -100,12 +100,6 @@ class SignupActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val s2 = s.toString()
-                if (s2.isEmpty()) {
-                    binding.edRegisterEmail.error = "Email is required"
-                } else {
-                    binding.edRegisterEmail.error = null
-                }
                 setRegisterButton()
             }
 
@@ -116,15 +110,6 @@ class SignupActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val s3 = s.toString()
-                if (s3.length < 8) {
-                    binding.edRegisterPassword.error = "Min 8 char!!"
-                    binding.passwordEditTextLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                } else {
-                    binding.edRegisterPassword.error = null
-                    binding.passwordEditTextLayout.endIconMode =
-                        TextInputLayout.END_ICON_PASSWORD_TOGGLE
-                }
                 setRegisterButton()
             }
 
@@ -140,6 +125,9 @@ class SignupActivity : AppCompatActivity() {
 
         binding.signupButton.isEnabled =
             name.isNotEmpty() && email.isNotEmpty() && password.length >= 8
+
+        binding.passwordEditTextLayout.endIconMode =
+            if (password.length >= 8) TextInputLayout.END_ICON_PASSWORD_TOGGLE else TextInputLayout.END_ICON_NONE
     }
 
     private fun showLoading(isLoading: Boolean) {

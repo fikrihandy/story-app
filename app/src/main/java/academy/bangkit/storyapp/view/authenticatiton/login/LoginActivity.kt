@@ -42,12 +42,6 @@ class LoginActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val s2 = s.toString()
-                if (s2.isEmpty()) {
-                    binding.edLoginEmail.error = "Email is required"
-                } else {
-                    binding.edLoginEmail.error = null
-                }
                 setLoginButton()
             }
 
@@ -58,15 +52,6 @@ class LoginActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val s3 = s.toString()
-                if (s3.length < 8) {
-                    binding.edLoginPassword.error = "Min 8 char!!"
-                    binding.passwordEditTextLayout.endIconMode = TextInputLayout.END_ICON_NONE
-                } else {
-                    binding.edLoginPassword.error = null
-                    binding.passwordEditTextLayout.endIconMode =
-                        TextInputLayout.END_ICON_PASSWORD_TOGGLE
-                }
                 setLoginButton()
             }
 
@@ -78,8 +63,11 @@ class LoginActivity : AppCompatActivity() {
         val email = binding.edLoginEmail.text.toString()
         val password = binding.edLoginPassword.text.toString()
 
-        binding.loginButton.isEnabled =
-            email.isNotEmpty() && password.length >= 8
+        binding.loginButton.isEnabled = email.isNotEmpty() && password.length >= 8
+
+        binding.passwordEditTextLayout.endIconMode =
+            if (password.length >= 8) TextInputLayout.END_ICON_PASSWORD_TOGGLE else TextInputLayout.END_ICON_NONE
+
     }
 
     private fun setupAction() {

@@ -107,7 +107,7 @@
         app:startIconDrawable="@drawable/ic_baseline_email_24"
         tools:alpha="100">
 
-        <academy.bangkit.storyapp.view.authenticatiton.customview.MyEditText
+        <academy.bangkit.storyapp.view.authenticatiton.customview.MyEmailEditText
             android:id="@+id/ed_register_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -143,7 +143,7 @@
         app:startIconDrawable="@drawable/ic_baseline_lock_24"
         tools:alpha="100">
 
-        <academy.bangkit.storyapp.view.authenticatiton.customview.MyEditText
+        <academy.bangkit.storyapp.view.authenticatiton.customview.MyPasswordEditText
             android:id="@+id/ed_register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

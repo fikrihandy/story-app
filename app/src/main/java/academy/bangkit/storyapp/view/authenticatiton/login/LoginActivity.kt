@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import academy.bangkit.storyapp.data.pref.UserModel
 import academy.bangkit.storyapp.databinding.ActivityLoginBinding
 import academy.bangkit.storyapp.view.ViewModelFactory
-import academy.bangkit.storyapp.view.authenticatiton.customview.CustomViewUtil
 import academy.bangkit.storyapp.view.liststory.MainActivity
 import academy.bangkit.storyapp.view.authenticatiton.signup.SignupActivity
 import academy.bangkit.storyapp.view.extension.EnableFullscreen
+import android.text.Editable
+import android.text.TextWatcher
+import com.google.android.material.textfield.TextInputLayout
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -27,22 +29,57 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        CustomViewUtil.setupCustomView(
-            binding.edLoginEmail,
-            binding.edLoginPassword,
-            binding.loginButton,
-            binding.passwordEditTextLayout
-        )
-
-        CustomViewUtil.setLoginButtonEnable(
-            binding.edLoginEmail.text.toString(),
-            binding.edLoginPassword.text.toString(),
-            binding.loginButton
-        )
+        setupCustomView()
+        setLoginButton()
 
         EnableFullscreen.setupView(window, supportActionBar)
         setupAction()
         playAnimation()
+    }
+
+    private fun setupCustomView() {
+        binding.edLoginEmail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val s2 = s.toString()
+                if (s2.isEmpty()) {
+                    binding.edLoginEmail.error = "Email is required"
+                } else {
+                    binding.edLoginEmail.error = null
+                }
+                setLoginButton()
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        binding.edLoginPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val s3 = s.toString()
+                if (s3.length < 8) {
+                    binding.edLoginPassword.error = "Min 8 char!!"
+                    binding.passwordEditTextLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                } else {
+                    binding.edLoginPassword.error = null
+                    binding.passwordEditTextLayout.endIconMode =
+                        TextInputLayout.END_ICON_PASSWORD_TOGGLE
+                }
+                setLoginButton()
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+    }
+
+    fun setLoginButton() {
+        val email = binding.edLoginEmail.text.toString()
+        val password = binding.edLoginPassword.text.toString()
+
+        binding.loginButton.isEnabled =
+            email.isNotEmpty() && password.length >= 8
     }
 
     private fun setupAction() {

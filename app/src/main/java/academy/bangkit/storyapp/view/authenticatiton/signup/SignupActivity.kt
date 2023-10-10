@@ -9,9 +9,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import academy.bangkit.storyapp.databinding.ActivitySignupBinding
 import academy.bangkit.storyapp.view.ViewModelFactory
-import academy.bangkit.storyapp.view.authenticatiton.customview.CustomViewUtil
 import academy.bangkit.storyapp.view.extension.EnableFullscreen
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.activity.viewModels
+import com.google.android.material.textfield.TextInputLayout
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
@@ -21,21 +23,8 @@ class SignupActivity : AppCompatActivity() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        CustomViewUtil.setupCustomView(
-            binding.edRegisterEmail,
-            binding.edRegisterPassword,
-            binding.signupButton,
-            binding.passwordEditTextLayout,
-            binding.edRegisterName,
-            loginPage = false
-        )
-
-        CustomViewUtil.setRegisterButtonEnable(
-            binding.edRegisterName.text.toString(),
-            binding.edRegisterEmail.text.toString(),
-            binding.edRegisterPassword.text.toString(),
-            binding.signupButton
-        )
+        setupCustomView()
+        setRegisterButton()
 
         EnableFullscreen.setupView(window, supportActionBar)
         setupAction()
@@ -81,6 +70,76 @@ class SignupActivity : AppCompatActivity() {
                 showLoading(it)
             }
         }
+    }
+
+    private fun setupCustomView() {
+        binding.edRegisterName.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val s1 = s.toString()
+                if (s1.isEmpty()) {
+                    binding.edRegisterName.error = "Name is required"
+                } else {
+                    binding.edRegisterName.error = null
+                }
+                setRegisterButton()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
+
+        binding.edRegisterEmail.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val s2 = s.toString()
+                if (s2.isEmpty()) {
+                    binding.edRegisterEmail.error = "Email is required"
+                } else {
+                    binding.edRegisterEmail.error = null
+                }
+                setRegisterButton()
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        binding.edRegisterPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                val s3 = s.toString()
+                if (s3.length < 8) {
+                    binding.edRegisterPassword.error = "Min 8 char!!"
+                    binding.passwordEditTextLayout.endIconMode = TextInputLayout.END_ICON_NONE
+                } else {
+                    binding.edRegisterPassword.error = null
+                    binding.passwordEditTextLayout.endIconMode =
+                        TextInputLayout.END_ICON_PASSWORD_TOGGLE
+                }
+                setRegisterButton()
+            }
+
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+    }
+
+    fun setRegisterButton() {
+        val name = binding.edRegisterName.text.toString()
+        val email = binding.edRegisterEmail.text.toString()
+        val password = binding.edRegisterPassword.text.toString()
+
+        binding.signupButton.isEnabled =
+            name.isNotEmpty() && email.isNotEmpty() && password.length >= 8
     }
 
     private fun showLoading(isLoading: Boolean) {

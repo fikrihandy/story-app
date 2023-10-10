@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.authenticatiton.login.LoginActivity">
+    tools:context=".view.authentication.login.LoginActivity">
 
     <include
         android:id="@+id/loadingView"
@@ -80,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@+id/emailTextView"
         app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-        <academy.bangkit.storyapp.view.authenticatiton.customview.MyEmailEditText
+        <academy.bangkit.storyApp.view.authentication.customview.MyEmailEditText
             android:id="@+id/ed_login_email"
             android:hint="@string/hint_login_email"
             android:layout_width="match_parent"
@@ -113,7 +113,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordTextView"
         app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
-        <academy.bangkit.storyapp.view.authenticatiton.customview.MyPasswordEditText
+        <academy.bangkit.storyApp.view.authentication.customview.MyPasswordEditText
             android:id="@+id/ed_login_password"
             android:hint="@string/hint_login_password"
             android:layout_width="match_parent"

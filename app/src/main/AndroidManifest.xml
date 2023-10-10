@@ -18,22 +18,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LoginWithAnimation">
         <activity
-            android:name=".view.storydetail.DetailStoryActivity"
+            android:name=".view.storyDetail.DetailStoryActivity"
             android:exported="false" />
         <activity
-            android:name=".view.addstory.AddStoryActivity"
+            android:name=".view.addStory.AddStoryActivity"
             android:exported="false" />
         <activity
-            android:name=".view.authenticatiton.signup.SignupActivity"
+            android:name=".view.authentication.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".view.authenticatiton.login.LoginActivity"
+            android:name=".view.authentication.login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".view.viewimage.FullScreenImageActivity"
+            android:name=".view.viewImage.FullScreenImageActivity"
             android:exported="false" />
         <activity
-            android:name=".view.liststory.MainActivity"
+            android:name=".view.listStory.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

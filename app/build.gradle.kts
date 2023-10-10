@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "academy.bangkit.storyapp"
+    namespace = "academy.bangkit.storyApp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "academy.bangkit.storyapp"
+        applicationId = "academy.bangkit.storyApp"
         minSdk = 21
         targetSdk = 33
         versionCode = 1

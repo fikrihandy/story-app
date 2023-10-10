@@ -33,7 +33,7 @@ class StoryAdapter : ListAdapter<Story, StoryAdapter.MyViewHolder>(DIFF_CALLBACK
     class MyViewHolder(private val binding: ItemRowStoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(story: Story) {
-            binding.imgItemPhoto.loadImageWithGlide(story.photoUrl)
+            binding.ivItemPhoto.loadImageWithGlide(story.photoUrl)
             binding.tvItemName.text = story.name
         }
     }

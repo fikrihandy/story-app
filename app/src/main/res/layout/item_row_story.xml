@@ -19,7 +19,7 @@
         android:padding="8dp">
 
         <ImageView
-            android:id="@+id/img_item_photo"
+            android:id="@+id/iv_item_photo"
             android:layout_width="match_parent"
             android:layout_height="350dp"
             android:scaleType="centerCrop"

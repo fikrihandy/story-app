@@ -23,8 +23,8 @@
     <string name="camera">Camera</string>
     <string name="delete">Delete Image</string>
     <string name="empty_image_warning">Please insert the image file</string>
-    <string name="add_desc">Add description here</string>
+    <string name="add_desc">Write a caption…</string>
     <string name="no_data">No data, please refresh.</string>
     <string name="refresh">Refresh</string>
-
+    <string name="open_in_full">Fullscreen</string>
 </resources>

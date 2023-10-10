@@ -5,7 +5,6 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -29,6 +28,9 @@
             android:exported="false" />
         <activity
             android:name=".view.authenticatiton.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.viewimage.FullScreenImageActivity"
             android:exported="false" />
         <activity
             android:name=".view.liststory.MainActivity"
@@ -62,11 +64,11 @@
             <intent-filter>
                 <action android:name="com.google.android.gms.metadata.MODULE_DEPENDENCIES" />
             </intent-filter>
+
             <meta-data
                 android:name="photopicker_activity:0:required"
                 android:value="" />
         </service>
-
     </application>
 
 </manifest>

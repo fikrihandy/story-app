@@ -8,9 +8,9 @@
             android:title="@string/refresh"
             app:showAsAction="ifRoom" />
         <item
-            android:id="@+id/addNewStory"
-            android:icon="@drawable/add_new_story"
-            android:title="@string/add_new_story"
+            android:id="@+id/fullscreen"
+            android:icon="@drawable/open_in_full"
+            android:title="@string/open_in_full"
             app:showAsAction="ifRoom" />
     </group>
 </menu>

@@ -6,12 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import java.io.File
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
 
 class AddStoryViewModel(private val repository: UserRepository) : ViewModel() {
 
-    private val _imageUri = MutableLiveData<Uri?>()
-    val imageUri: LiveData<Uri?> = _imageUri
+    private var imageUri: Uri? = null
 
     fun uploadImage(file: File, description: String): LiveData<ResultState<FileUploadResponse>> {
         val token: String = repository.getToken()
@@ -19,6 +17,8 @@ class AddStoryViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     fun setImageUri(uri: Uri?) {
-        _imageUri.value = uri
+        imageUri = uri
     }
+
+    fun getImageUri(): Uri? = imageUri
 }

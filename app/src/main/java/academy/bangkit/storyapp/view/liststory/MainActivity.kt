@@ -11,6 +11,7 @@ import academy.bangkit.storyapp.view.ViewModelFactory
 import academy.bangkit.storyapp.view.addstory.AddStoryActivity
 import academy.bangkit.storyapp.view.authenticatiton.login.LoginActivity
 import academy.bangkit.storyapp.view.extension.EnableFullscreen
+import academy.bangkit.storyapp.view.extension.observeOnce
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -43,19 +44,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllStories()
+    }
+
     private fun setupAction() {
 
         viewModel.getAllStories()
-        viewModel.storiesResponse.observe(this) { allStories ->
-            Toast.makeText(this, allStories.message, Toast.LENGTH_LONG).show()
-            if (allStories.listStory.isEmpty()) {
-                binding.noData.visibility = View.VISIBLE
-            }
-            if (!allStories.error) {
-                binding.noData.visibility = View.GONE
-                setItemData(allStories.listStory)
-            }
-        }
+        observeStoriesResponse()
         viewModel.isLoading.observe(this) { isLoading ->
             showLoading(isLoading)
         }
@@ -91,12 +88,26 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.refresh -> {
                     viewModel.getAllStories()
+                    observeStoriesResponse()
                     true
                 }
 
                 else -> false
             }
 
+        }
+    }
+
+    private fun observeStoriesResponse() {
+        viewModel.storiesResponse.observeOnce(this) { allStories ->
+            Toast.makeText(this, allStories.message, Toast.LENGTH_LONG).show()
+            if (allStories.listStory.isEmpty()) {
+                binding.noData.visibility = View.VISIBLE
+            }
+            if (!allStories.error) {
+                binding.noData.visibility = View.GONE
+                setItemData(allStories.listStory)
+            }
         }
     }
 

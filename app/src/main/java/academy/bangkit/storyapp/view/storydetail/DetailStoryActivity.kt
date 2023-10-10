@@ -5,13 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import academy.bangkit.storyapp.databinding.ActivityDetailStoryBinding
 import academy.bangkit.storyapp.view.ViewModelFactory
-import academy.bangkit.storyapp.view.addstory.AddStoryActivity
 import academy.bangkit.storyapp.view.extension.EnableFullscreen
+import academy.bangkit.storyapp.view.extension.Image
 import academy.bangkit.storyapp.view.extension.loadImageWithGlide
+import academy.bangkit.storyapp.view.viewimage.FullScreenImageActivity
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -32,17 +35,17 @@ class DetailStoryActivity : AppCompatActivity() {
         EnableFullscreen.setupView(window, supportActionBar)
         val id = intent.getStringExtra(ID_STORY) as String
 
-        setupAppBar(id)
-
         viewModel.getDetailStory(id)
         viewModel.detailStoryResponse.observe(this) {
             Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
             if (it.error || it.story == null) {
                 binding.ivDetailPhoto.setImageResource(R.drawable.ic_place_holder)
                 binding.tvDetailDescription.text = it.message
+                setupAppBar(id)
             }
             val story = it.story
             if (story != null) {
+                setupAppBar(story.id, story.photoUrl)
                 binding.ivDetailPhoto.loadImageWithGlide(story.photoUrl)
                 binding.tvDetailName.text = story.name
                 binding.tvDetailDescription.text = story.description
@@ -54,12 +57,34 @@ class DetailStoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAppBar(id: String) {
+    private fun fullScreen(photoUrl: String) {
+        val image = Image(photoUrl)
+        val intent = Intent(this, FullScreenImageActivity::class.java)
+        intent.putExtra("Image", image)
+
+        val optionsCompat: ActivityOptionsCompat =
+            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                Pair(binding.ivDetailPhoto, "image")
+            )
+        startActivity(intent, optionsCompat.toBundle())
+    }
+
+    private fun setupAppBar(id: String, photoUrl: String? = null) {
+
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         binding.topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.addNewStory -> {
-                    val intent = Intent(this@DetailStoryActivity, AddStoryActivity::class.java)
-                    startActivity(intent)
+                R.id.fullscreen -> {
+                    if (photoUrl != null) {
+                        fullScreen(photoUrl)
+                    } else {
+                        Toast.makeText(this, "Story not found, please refresh", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                     true
                 }
 

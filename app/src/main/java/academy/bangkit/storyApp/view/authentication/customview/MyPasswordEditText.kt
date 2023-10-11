@@ -1,5 +1,6 @@
 package academy.bangkit.storyApp.view.authentication.customview
 
+import academy.bangkit.storyApp.R
 import android.content.Context
 import android.graphics.Canvas
 import android.text.Editable
@@ -39,7 +40,7 @@ class MyPasswordEditText : AppCompatEditText, OnTouchListener {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val s3 = s.toString()
-                error = (if (s3.length < 8) "Min 8 char!!" else null)
+                error = if (s3.length < 8) context.getString(R.string.minimum_character) else null
             }
 
             override fun afterTextChanged(s: Editable) {}

@@ -9,6 +9,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
+        buildConfigField(
+            "String",
+            "BASE_URL",
+            "\"https://story-api.dicoding.dev/v1/\""
+        )
         applicationId = "academy.bangkit.storyApp"
         minSdk = 21
         targetSdk = 33

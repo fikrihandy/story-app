@@ -1,6 +1,6 @@
 # StoryApp Android Application
 
-The StoryApp application is a project developed by Abdullah Fikri as part of the submission for
+The StoryApp application is a project developed as part of the submission for
 the "[Intermediate Android Application Development](https://www.dicoding.com/academies/352)" class
 at Dicoding Academy (**Bangkit Academy 2023 H2 Mobile Development**). This application aims to
 facilitate users in reading and sharing short stories with a user-friendly interface.
